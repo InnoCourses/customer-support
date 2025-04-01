@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "customer-support"
+version = "0.1.0"
+description = "Customer support system with FastAPI backend and Telegram bot frontend"
+authors = ["alexstrnik <alex.str.nik@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.0"
+supabase = "^2.15.0"
+openai = "^1.69.0"
+python-dotenv = "^1.1.0"
+pydantic = "^2.11.1"
+aiogram = "<3.0.0"
+httpx = "^0.28.1"
+black = "^25.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

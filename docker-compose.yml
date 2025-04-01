@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python main.py
+    ports:
+      - "8000:8000"
+    environment:
+      - API_BASE_URL=http://api:8000/api
+    env_file:
+      - .env
+    networks:
+      - customer-support-network
+    restart: unless-stopped
+
+  bots:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python run_bots.py
+    environment:
+      - API_BASE_URL=http://api:8000/api
+    env_file:
+      - .env
+    depends_on:
+      - api
+    networks:
+      - customer-support-network
+    restart: unless-stopped
+
+networks:
+  customer-support-network:
+    driver: bridge

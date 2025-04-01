@@ -143,6 +143,7 @@ docker-compose up -d
 ```
 
 This will start two containers:
+
 - `api`: The FastAPI server that handles API requests
 - `bots`: The Telegram bots (both user and admin bots)
 
@@ -160,3 +161,43 @@ docker-compose logs -f
 docker-compose down
 ```
 
+### Production Deployment
+
+#### Prerequisites for Production
+
+- A VPS or cloud instance (AWS EC2, DigitalOcean Droplet, Google Compute Engine, etc.)
+- Docker and Docker Compose installed on the server
+- Domain name (optional but recommended for production)
+- SSL certificate (recommended for secure API communications)
+
+#### Deployment Steps
+
+1. Set up your server and install Docker + Docker Compose:
+
+```bash
+# For Ubuntu/Debian-based systems
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+2. Clone the repository on your server:
+
+```bash
+git clone https://github.com/InnoCourses/customer-support
+cd customer-support
+```
+
+3. Create and configure the `.env` file with production values:
+
+```bash
+cp .env.example .env
+# Edit .env with your production credentials
+```
+
+4. Deploy the application:
+
+```bash
+docker-compose up -d
+```

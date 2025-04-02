@@ -23,7 +23,7 @@ class SupabaseDB:
             self.client.table(self.issues_table)
             .select("*")
             .eq("telegram_chat_id", telegram_chat_id)
-            .neq("status", IssueStatus.CLOSED)
+            .neq("status", "closed")
             .execute()
         )
 
@@ -45,7 +45,8 @@ class SupabaseDB:
             "status": IssueStatus.OPEN,
         }
 
-        response = self.client.table(self.issues_table).insert(issue_data).execute()
+        response = self.client.table(
+            self.issues_table).insert(issue_data).execute()
 
         if response.data and len(response.data) > 0:
             return Issue(**response.data[0])
@@ -83,7 +84,8 @@ class SupabaseDB:
         }
 
         # Insert the new message into the messages table
-        response = self.client.table(self.messages_table).insert(message_data).execute()
+        response = self.client.table(
+            self.messages_table).insert(message_data).execute()
 
         if response.data and len(response.data) > 0:
             return Message(**response.data[0])
@@ -149,7 +151,8 @@ class SupabaseDB:
             "username": username,
         }
 
-        response = self.client.table(self.admins_table).insert(admin_data).execute()
+        response = self.client.table(
+            self.admins_table).insert(admin_data).execute()
 
         if response.data and len(response.data) > 0:
             return Admin(**response.data[0])
@@ -159,7 +162,8 @@ class SupabaseDB:
 
     # FAQ methods
     async def get_all_faqs(self) -> List[FAQ]:
-        response = self.client.table(self.faq_embeddings_table).select("*").execute()
+        response = self.client.table(
+            self.faq_embeddings_table).select("*").execute()
 
         if response.data:
             return [FAQ(**item) for item in response.data]

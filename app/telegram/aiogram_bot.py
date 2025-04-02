@@ -41,6 +41,7 @@ class CustomerSupportBot:
         dp.register_message_handler(self.new_issue_command, Command("new"))
         dp.register_message_handler(self.status_command, Command("status"))
         dp.register_message_handler(self.manual_command, Command("manual"))
+        dp.register_message_handler(self.close_command, Command("close"))
         dp.register_message_handler(
             self.handle_message, content_types=types.ContentTypes.TEXT
         )
@@ -52,6 +53,7 @@ class CustomerSupportBot:
             "Use /new to create a new support request.\n"
             "Use /status to check your current request status.\n"
             "Use /manual to request human assistance.\n"
+            "Use /close to close your current issue.\n"
             "Use /help to see all available commands."
         )
 
@@ -146,6 +148,31 @@ class CustomerSupportBot:
             logger.error(f"Error in manual_command: {e}")
             await message.reply(
                 "Sorry, I couldn't process your request due to a technical issue. Please try again later."
+            )
+            
+    async def close_command(self, message: types.Message):
+        """Close the current support issue."""
+        chat_id = str(message.chat.id)
+        
+        try:
+            # Check if user has an open issue
+            issue = await api_client.get_user_issue(chat_id)
+            if issue:
+                # Close the issue
+                closed_issue = await api_client.close_user_issue(issue.issue_id)
+                await message.reply(
+                    f"Your support request (ID: {closed_issue.issue_id}) has been closed.\n"
+                    f"Thank you for using our support service!"
+                )
+            else:
+                await message.reply(
+                    "You don't have any active support requests to close.\n"
+                    "Use /new to create one."
+                )
+        except ApiClientError as e:
+            logger.error(f"Error in close_command: {e}")
+            await message.reply(
+                "Sorry, I couldn't close your support request due to a technical issue. Please try again later."
             )
 
     async def handle_message(self, message: types.Message):

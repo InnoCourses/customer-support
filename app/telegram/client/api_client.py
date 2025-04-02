@@ -78,6 +78,11 @@ class ApiClient:
         """Switch an issue to manual mode"""
         data = await self._make_request("PUT", f"/public/issues/{issue_id}/manual")
         return IssueResponse(**data)
+        
+    async def close_user_issue(self, issue_id: str) -> IssueResponse:
+        """Close a user issue"""
+        data = await self._make_request("POST", f"/public/issues/{issue_id}/close")
+        return IssueResponse(**data)
 
     # Private API endpoints (Admin Bot)
 

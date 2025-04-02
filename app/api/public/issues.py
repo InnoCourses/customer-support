@@ -86,3 +86,26 @@ async def switch_to_manual(
         raise HTTPException(status_code=500, detail="Failed to switch to manual mode")
 
     return IssueResponse(issue_id=updated_issue.id, status=updated_issue.status)
+
+
+@router.post("/{issue_id}/close", response_model=IssueResponse)
+async def close_issue(
+    issue_id: str, issue_service: IssueService = Depends(get_issue_service)
+):
+    """Close an issue"""
+    # Get issue
+    issue = await issue_service.get_issue(issue_id)
+
+    if not issue:
+        raise HTTPException(status_code=404, detail="Issue not found")
+
+    if issue.status == "closed":
+        raise HTTPException(status_code=400, detail="Issue is already closed")
+
+    # Close issue
+    updated_issue = await issue_service.close_issue(issue_id)
+
+    if not updated_issue:
+        raise HTTPException(status_code=500, detail="Failed to close issue")
+
+    return IssueResponse(issue_id=updated_issue.id, status=updated_issue.status)
